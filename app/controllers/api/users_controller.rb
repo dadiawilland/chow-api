@@ -2,6 +2,11 @@ module Api
     class UsersController < Api::ApplicationController
       skip_before_action :doorkeeper_authorize!, only: %i[create]
   
+      def index
+        @users = User.all
+        render json: { users: @users }
+      end    
+
       def create
         user = User.new(email: user_params[:email], password: user_params[:password])
         client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
